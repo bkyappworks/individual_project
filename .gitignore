@@ -1,0 +1,14 @@
+*.env
+# JPEG
+*.jpg
+*.jpeg
+*.jpe
+*.jif
+*.jfif
+*.jfi
+*.pyo
+*.pyc
+*/__pycache__
+*.json
+*.csv
+*.unix
