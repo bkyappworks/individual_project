@@ -10,9 +10,16 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import requests
 import random
+import urllib.parse as urlparse
+from urllib.parse import parse_qs
+
+"""
+Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36
+"""
 
 options = webdriver.ChromeOptions()
-options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/47.0')
+# options.add_argument('user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36')
 options.add_experimental_option('prefs', {'intl.accept_languages': 'en,en_US'})
 driver = webdriver.Chrome(executable_path = '/Users/beckyliu/individual_project/chromedriver',options=options) 
 
@@ -34,7 +41,7 @@ def search(position,country):
     search_location.send_keys(country)
     search_location.send_keys(Keys.RETURN)
     print('searched successfully!')
-
+# search('Data Engineer','United States')
 def getJD():
     #find jobs
     data = []
@@ -45,9 +52,6 @@ def getJD():
     if len(jobs) == 0:
         print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
         pass
-        # time.sleep(random.randint(3,5))
-        # search('Software Engineer','United States')
-        # raise IOError("Try Again!")
     else:
         jobs = driver.find_elements_by_class_name('result-card')
         for job in jobs:
@@ -56,6 +60,10 @@ def getJD():
             time.sleep(random.randint(3,5))
             # get info:
             try:
+                url = driver.current_url
+                parsed = urlparse.urlparse(url)
+                # print(type(parse_qs(parsed.query)['currentJobId'][0]))
+                currentJobId = 'https://www.linkedin.com/jobs/view/'+parse_qs(parsed.query)['currentJobId'][0]
                 [position, company, location, hiringStatus, postTime] = job.text.split('\n')[:5]
                 print([position, company, location, hiringStatus, postTime])
                 time.sleep(random.randint(1,3))
@@ -63,13 +71,15 @@ def getJD():
                 showMore[0].click()
                 details = driver.find_element_by_class_name("description__text").text
                 # print(details)
-                t = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
-                data.append([position, company, location,hiringStatus,postTime,t,details])
+                # t = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
+                data.append([position, company, location,hiringStatus,postTime,currentJobId,details])
                 # data.append([position, company, location,hiringStatus,postTime])
                 print('-------------- Done this Job --------------')
             except:
                 continue
     return data
+
+# getJD()
 
 def saveJobs():
     all = list()
@@ -78,9 +88,9 @@ def saveJobs():
     print('--------------  exceute getJD() -------------- ')
     return all
 
-def scroll():
+def scroll(position,country):
     saveall = list()
-    search('Data Engineer','United States')
+    search(position,country)
     try:
         seeMoreJobs = driver.find_elements_by_class_name('infinite-scroller__show-more-button--visible')
         # while len(seeMoreJobs) < 1:
@@ -102,10 +112,6 @@ def scroll():
     print('saveall[0]: ',saveall[0])
     return saveall
 
-# print(saveJobs()[0:5])
-# print(scroll())
-# print('len(scroll()): ',len(scroll()))
-
 def saveDB(data):
     Host = os.getenv("Host")
     User = os.getenv("User")
@@ -119,9 +125,10 @@ def saveDB(data):
                                 cursorclass=pymysql.cursors.DictCursor)
     with connection:
         cursor = connection.cursor()
-        back = cursor.executemany("INSERT INTO Job (position,company,location,status,posttime,savetodbtime,details) VALUES(%s,%s,%s,%s,%s,%s,%s)", data) 
+        back = cursor.executemany("INSERT INTO Jobs (position,company,location,hiringstatus,posttime,url,description) VALUES(%s,%s,%s,%s,%s,%s,%s)", data) 
+        # [position, company, location,hiringStatus,postTime,currentJobId,details]
         connection.commit()
         print('Items save to db: ',back)
 
-saveDB(scroll())
+saveDB(scroll('Data Analyst','United States'))
 print('Done!')

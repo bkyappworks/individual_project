@@ -22,15 +22,15 @@ engine = create_engine(
 connection = engine.raw_connection()
 cursor = connection.cursor()
 
-test = 100
+test = 20
 
 # skill_score table
-def skill_score():
+def skill_match():
     all = list()
     kw = list()
     infos = list()
-    # cursor.execute("select id,position,company from Jobs limit %s",test) 
-    cursor.execute("select job_id,position,company from Joball") 
+    # cursor.execute("select job_id,position,company from job_raw limit %s",test) 
+    cursor.execute("select job_id from job_raw") 
     info = list(cursor.fetchall())
     # print(info)
     for i in info:
@@ -40,7 +40,7 @@ def skill_score():
 
     # kw
     # cursor.execute("select description from Jobs limit %s",test) 
-    cursor.execute("select description from Jobs") 
+    cursor.execute("select description from job_raw") 
     jds = cursor.fetchall()
 
     for jd in jds: 
@@ -58,73 +58,90 @@ def skill_score():
         all.append(com)
 
     print(len(all))
+    print(all[:2])
+    return all
+# print(skill_score()) #[['2546120842', 'Data Engineer', 'Facebook', 1, 1, 0, 1, 0, 0], ['2539683107', 'Data Engineer', 'Slack', 3, 1, 0, 3, 0, 1], ['2528321227', 'Data Engineer', 'Tesla', 3, 5, 2, 1, 0, 4]]
+def save_match(data): #INSERT INTO skill_match (`job_id`,`position`,`company`,`SQL`,`Python`,`Java`,`Spark`,`AWS`,`ETL`) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)
+    sql = "INSERT INTO skill_match_radar (`job_id`,`SQL`,`Python`,`Java`,`Spark`,`AWS`,`ETL`) VALUES(%s,%s,%s,%s,%s,%s,%s)"
+    back = cursor.executemany(sql, data)  
+    connection.commit()
+    print('Items save to db: ',back)
+
+# save successfully
+# save_match(skill_match())
+
+def work_years_required():
+    all = list()
+    cursor.execute("select job_id,description from job_raw") 
+    # cursor.execute("select job_id,description from job_raw limit %s",test) 
+    infos = list(cursor.fetchall())
+    for i in range(len(infos)):
+        job_id = infos[i][0]
+        jd = infos[i][1]
+        # print(job_id)
+        year_of_exp = re.findall(
+            r'[0-9].*years.*experience.*',
+            jd,
+            re.IGNORECASE)
+        if len(year_of_exp) >= 1:
+            for i in range(len(year_of_exp)):
+                all.append([job_id,year_of_exp[i]])
+        else:
+            all.append([job_id,'Not Specified'])
     # print(all)
     return all
 
-def save_match(data): #INSERT INTO skill_match (`job_id`,`position`,`company`,`SQL`,`Python`,`Java`,`Spark`,`AWS`,`ETL`) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)
-    sql = "INSERT INTO skill_score (`job_id`,`position`,`company`,`SQL`,`Python`,`Java`,`Spark`,`AWS`,`ETL`) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+def save_year(data):
+    sql = "INSERT INTO work_years_required (`job_id`,`years_of_experience`) VALUES(%s,%s)"
     back = cursor.executemany(sql, data)  
     connection.commit()
     print('Items save to db: ',back)
-
 # save successfully
-# save_match(skill_score())
+# save_year(work_years_required())
 
-def job_description():
-    infos = list()
-    # cursor.execute("select id,position,company from Jobs limit %s",test) 
-    cursor.execute("select job_id,position,company from Joball") 
-    info = list(cursor.fetchall())
-    # print(info)
-    for i in info:
-        i = list(i)
-        infos.append(i)
-    # print(infos)    
-
-    # brief
+def exp_required():
     all = list()
-    briefs = list()
-    years = list()
-    # cursor.execute("select description from Jobs limit %s",test) 
-    cursor.execute("select description from Jobs") 
-    jds = cursor.fetchall()
-    for jd in jds:
-        brief = re.findall(
-            r'years.*|experience in.*|experience with.*|experience of.*|skill with.*|skill including.*|understand.*|programming.*\.?$',
-            jd[0],
-            re.IGNORECASE)
-        briefs.append(json.dumps({'brief':brief}))
-        year = re.findall(
-            r'[0-9].* years.*',
-            jd[0],
-            re.IGNORECASE)
-        years.append(json.dumps({'year':year}))
+    cursor.execute("select job_id,description from job_raw") 
+    # cursor.execute("select job_id,description from job_raw limit %s",test) 
+    infos = list(cursor.fetchall())
     for i in range(len(infos)):
-        all.append(infos[i]+[briefs[i]]+[years[i]])
-    print(all[0])
-    print(len(all))
+        job_id = infos[i][0]
+        jd = infos[i][1]
+        # print(job_id)
+        exp = re.findall(
+                r'years.*|experience in.*|experience with.*|experience of.*|skill with.*|skill including.*|understand.*|programming.*\.?$',
+                jd,
+                re.IGNORECASE)
+        if len(exp) >= 1:
+            for i in range(len(exp)):
+                all.append([job_id,exp[i]])
+        else:
+            all.append([job_id,'Not Specified'])
+    # print(all)
     return all
 
-def save_jd(data):
-    sql = "INSERT INTO jd_brief (`job_id`,`position`,`company`,`brief`,`year`) VALUES(%s,%s,%s,%s,%s)"
+def save_exp(data):
+    sql = "INSERT INTO exp_required (`job_id`,`experience_required`) VALUES(%s,%s)"
     back = cursor.executemany(sql, data)  
     connection.commit()
     print('Items save to db: ',back)
 # save successfully
-# save_jd(job_description())
+# save_exp(exp_required())
 
-"""
+
 # too few
-cursor.execute("select description from Jobs limit %s",test) 
-jds = cursor.fetchall()
-for jd in jds:
-    salary = re.findall(r'\$.*',jd[0])
-    print('salary: ',salary)
-"""
+# cursor.execute("select description from job_raw limit %s",test) 
+# cursor.execute("select description from job_raw") 
+# jds = cursor.fetchall()
+# for jd in jds:
+#     salary = re.findall(r'\$.*bonus|\$.*pay|\$.*depend.*',jd[0])
+#     if salary:
+#         print('salary: ',salary)
+
 
 def cal_sim():
     # cursor.execute("select description from Joball limit %s",test) 
-    cursor.execute("select description from Joball") 
+    cursor.execute("select description from job_raw") 
     details = cursor.fetchall()
 
     skillset = [
@@ -156,7 +173,7 @@ def cal_sim():
     # print(insert_all[0:3])
     id_list = []
     # cursor.execute("select job_id from Joball limit %s",test) 
-    cursor.execute("select job_id from Joball") 
+    cursor.execute("select job_id from job_raw") 
     job_ids = cursor.fetchall()
     for id in job_ids:
         id_list.append(id[0])
@@ -178,10 +195,10 @@ def cal_sim():
 
 def save_sim(data):
     # back = cursor.executemany("INSERT INTO skill_sim (job1_id,job2_id,similarity) VALUES(%s,%s,%s)", data) 
-    back = cursor.executemany("INSERT INTO recommendations (job1_id,job2_id,similarity) VALUES(%s,%s,%s)", data) 
+    back = cursor.executemany("INSERT INTO recommendation (job1_id,job2_id,similarity) VALUES(%s,%s,%s)", data) 
     connection.commit()
     print('Items save to db: ',back)
 # save successfully
-# save_sim(cal_sim())
+save_sim(cal_sim())
 
 
