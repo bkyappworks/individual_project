@@ -234,20 +234,20 @@ cursor = connection.cursor()
 # ENGINE=InnoDB DEFAULT CHARSET=utf8
 # """
 
-sql = """CREATE TABLE `skill_match_radar` (
-`id` int AUTO_INCREMENT,
-`job_id` varchar(255),
-`SQL` int,
-`Python` int ,
-`Java` int,
-`Spark` int,
-`AWS` int,
-`ETL` int,
-PRIMARY KEY (`id`),
-FOREIGN KEY (`job_id`) REFERENCES job_raw(`job_id`) 
-) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8
-"""
+# sql = """CREATE TABLE `skill_match_radar` (
+# `id` int AUTO_INCREMENT,
+# `job_id` varchar(255),
+# `SQL` int,
+# `Python` int ,
+# `Java` int,
+# `Spark` int,
+# `AWS` int,
+# `ETL` int,
+# PRIMARY KEY (`id`),
+# FOREIGN KEY (`job_id`) REFERENCES job_raw(`job_id`) 
+# ) 
+# ENGINE=InnoDB DEFAULT CHARSET=utf8
+# """
 
 # sql = """CREATE TABLE `recommendation` (
 # `id` int AUTO_INCREMENT,
@@ -258,7 +258,56 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8
 # FOREIGN KEY (`job1_id`) REFERENCES job_raw(`job_id`)
 # ) 
 # ENGINE=InnoDB DEFAULT CHARSET=utf8
-# # """
+# """
 
+
+# 'SQL','Python','Spark','AWS','Java','Hadoop','Hive', 'Scala','Kafka','NoSQL','Redshift','Azure',
+# 'Linux','R','Tableau','Oracle','Git','Cassandra','Airflow','Snowflake','Docker','MySQL','PostgreSQL',
+# 'C++','MongoDB','GCP','Jenkins','data pipeline','data warehouse','data modeling','ETL','API','Perl','Go','Tensorflow','Javascript','Keras'
+
+sql = """CREATE TABLE `skill_score` (
+`id` int AUTO_INCREMENT,
+`job_id` varchar(255),
+`SQL` int,
+`Python` int ,
+`Spark` int,
+`AWS` int,
+`Java` int,
+`Hadoop` int,
+`Hive` int, 
+`Scala` int,
+`Kafka` int,
+`NoSQL` int,
+`Redshift` int,
+`Azure` int,
+`Linux` int,
+`Tableau` int,
+`Git` int,
+`Cassandra` int,
+`Airflow` int,
+`Snowflake` int,
+`Docker` int,
+`MySQL` int,
+`PostgreSQL` int,
+`C++` int,
+`MongoDB` int,
+`GCP` int,
+`Jenkins` int,
+`data pipeline` int,
+`data warehouse` int,
+`data modeling` int,
+`ETL` int,
+`API` int,
+`Perl` int,
+`Tensorflow` int,
+`Javascript` int,
+`Keras` int,
+`Html` int,
+`Css` int,
+PRIMARY KEY (`id`),
+FOREIGN KEY (`job_id`) REFERENCES job_raw(`job_id`) 
+) 
+ENGINE=InnoDB DEFAULT CHARSET=utf8
+"""
 cursor.execute(sql)
 

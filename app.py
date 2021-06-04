@@ -40,7 +40,11 @@ def jobinfo():
         recommend = models.rec(str(selected_job))
         # score
         score_id = request.args.get('score', type = str)
+        # score_id = '2528321227'
         score = models.job_score(str(score_id))
+        print('score_id: ',score_id)
+        print('score: ',score['skills'])
+        print(len(score['skills']))
         # trend
         trend = models.trend()
         # print({"trend":trend})

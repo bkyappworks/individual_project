@@ -25,7 +25,7 @@ ua.safari
 """
 
 options = webdriver.ChromeOptions()
-options.add_argument('user-agent=Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1')
+# options.add_argument('user-agent=Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1')
 options.add_experimental_option('prefs', {'intl.accept_languages': 'en,en_US'})
 driver = webdriver.Chrome(executable_path = '/Users/beckyliu/individual_project/chromedriver',options=options) 
 
@@ -52,14 +52,16 @@ def getJD():
     #find jobs
     data = []
     time.sleep(5)
-    jobs = driver.find_elements_by_class_name('result-card')
+    # jobs = driver.find_elements_by_class_name('result-card')
+    jobs = driver.find_elements_by_class_name('base-card') #43
     print('================ New Page ================  ')
     print('how many jobs on this page: ',len(jobs)) 
     if len(jobs) == 0:
         print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
         pass
     else:
-        jobs = driver.find_elements_by_class_name('result-card')
+        # jobs = driver.find_elements_by_class_name('result-card')
+        jobs = driver.find_elements_by_class_name('base-card')
         for job in jobs:
             driver.execute_script("arguments[0].scrollIntoView();", job)
             job.click()
@@ -100,11 +102,9 @@ def scroll(position,country):
     saveall = list()
     search(position,country)
     try:
-        seeMoreJobs = driver.find_elements_by_class_name('infinite-scroller__show-more-button--visible')
-        # while len(seeMoreJobs) < 1:
-        #     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        #     time.sleep(random.randint(5,10))
-        #     print(len(seeMoreJobs))
+        # seeMoreJobs = driver.find_elements_by_class_name('infinite-scroller__show-more-button--visible') #original
+        seeMoreJobs = driver.find_elements_by_class_name('infinite-scroller__show-more-button')
+        print('len(seeMoreJobs): ',len(seeMoreJobs))
         print(seeMoreJobs[0])
         seeMoreJobs[0].click()
         print('clicked!')   
@@ -115,9 +115,10 @@ def scroll(position,country):
     except:
         # pass
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        print('keep scroll!')
 
     saveall.extend(saveJobs())
-    print('saveall[0]: ',saveall[0])
+    # print('saveall[0]: ',saveall[0])
     return saveall
 
 def saveDB(data):
@@ -133,10 +134,10 @@ def saveDB(data):
                                 cursorclass=pymysql.cursors.DictCursor)
     with connection:
         cursor = connection.cursor()
-        back = cursor.executemany("INSERT INTO Joball (job_id,position,company,location,hiringstatus,posttime,savetime,url,description) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", data) 
+        back = cursor.executemany("INSERT IGNORE INTO job_raw (job_id,position,company,location,hiringstatus,posttime,savetime,url,description) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", data) 
         # [position, company, location,hiringStatus,postTime,currentJobId,details]
         connection.commit()
         print('Items save to db: ',back)
 
-saveDB(scroll('Data Analyst','United States'))
+saveDB(scroll('Data Engineer','United States'))
 print('Done!')
