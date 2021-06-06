@@ -99,6 +99,7 @@ def saveJobs():
     return all
 
 def scroll(position,country):
+    start = time.perf_counter() 
     saveall = list()
     search(position,country)
     try:
@@ -119,6 +120,8 @@ def scroll(position,country):
 
     saveall.extend(saveJobs())
     # print('saveall[0]: ',saveall[0])
+    finish = time.perf_counter()
+    print(f'Finished in {round(finish-start, 2)} second(s)') 
     return saveall
 
 def saveDB(data):

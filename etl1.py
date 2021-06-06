@@ -27,7 +27,7 @@ test = 3
 job_id = '2550755919'
 
 import time
-cal_after = int(round(time.time()-86400*7,0))
+cal_after = int(round(time.time()-86400*1,0))
 # print(cal_after)
 
 # skill_score table
@@ -47,7 +47,7 @@ def skill_score():
     # print(infos)
     # kw
     # cursor.execute("select description from job_raw limit %s",test) 
-    cursor.execute("select description from job_raw where savetime > %s",cal_after") 
+    cursor.execute("select description from job_raw where savetime > %s",cal_after) 
     # cursor.execute("select description from job_raw")
     jds = cursor.fetchall()
     # print(jds[0])
@@ -197,7 +197,7 @@ def save_exp(data):
 # save_exp(exp_required())
 
 def cal_sim():
-    cursor.execute("drop table recommendation")
+    # cursor.execute("drop table recommendation")
     sql = """CREATE TABLE `recommendation` (
     `id` int AUTO_INCREMENT,
     `job1_id` varchar(255),
