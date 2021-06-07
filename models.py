@@ -17,7 +17,9 @@ User = os.getenv("User")
 Password = os.getenv("Password")
 Path = os.getenv("Path")
 
-engine = create_engine('mysql+pymysql://'+User+':'+Password+'@localhost/JHT',echo = True)
+# engine = create_engine('mysql+pymysql://'+User+':'+Password+'@localhost/JHT',echo = True)
+connection_string = 'mysql+pymysql://'+User+':'+Password+'@'+Host+':3306/JHT'
+engine = create_engine(connection_string,echo = True)
 connection = engine.raw_connection()
 cursor = connection.cursor()
 

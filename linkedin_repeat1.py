@@ -7,7 +7,7 @@ from selenium import webdriver
 import time
 from selenium.webdriver.common.keys import Keys
 from urllib.request import urlopen
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 import requests
 import random
 import urllib.parse as urlparse
@@ -29,6 +29,17 @@ options = webdriver.ChromeOptions()
 options.add_experimental_option('prefs', {'intl.accept_languages': 'en,en_US'})
 driver = webdriver.Chrome(executable_path = '/Users/beckyliu/individual_project/chromedriver',options=options) 
 
+# if on EC2
+"""
+from selenium.webdriver.chrome.options import Options
+options = Options()
+options.add_argument('user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36')
+options.add_experimental_option('prefs', {'intl.accept_languages': 'en,en_US'})
+options.headless = True
+driver = webdriver.Chrome(options=options)
+
+"""
+
 # no scroll one page
 def search(position,country):
     driver.get("https://www.linkedin.com/jobs/")
@@ -40,6 +51,7 @@ def search(position,country):
 
     # find the keywords/location search bars:
     search_bars = driver.find_elements_by_class_name('dismissable-input__input')
+    print('len(search_bars)',len(search_bars))
     search_keywords = search_bars[2]
     search_keywords.send_keys(position)    
     search_location = search_bars[3] 
@@ -120,6 +132,7 @@ def scroll(position,country):
 
     saveall.extend(saveJobs())
     # print('saveall[0]: ',saveall[0])
+    driver.quit()
     finish = time.perf_counter()
     print(f'Finished in {round(finish-start, 2)} second(s)') 
     return saveall
