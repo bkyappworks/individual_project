@@ -12,6 +12,8 @@ app = Flask(__name__,
 app.secret_key = 'auoesh.bouoastuh.43,uoausoehuosth3ououea.auoub!'
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True #排版
 app.config['JSON_AS_ASCII'] = False #中文
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
 
 
 @app.route('/', methods=('GET', 'POST'))
@@ -44,12 +46,12 @@ def jobinfo():
         score = models.job_score(str(score_id))
         print('score_id: ',score_id)
         print('score: ',score['skills'])
-        print(len(score['skills']))
+        # print(len(score['skills']))
         # trend
         trend = models.trend()
-        # print({"trend":trend})
 
         return {'jobinfo':jobinfo,'recommend':recommend,'score':score,'trend':trend} #,'trend':trend
+        # return {'jobinfo':jobinfo,'recommend':recommend,'score':score}
 
 @app.route('/test', methods=('GET', 'POST'))
 def test(): 

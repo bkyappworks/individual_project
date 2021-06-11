@@ -1,3 +1,4 @@
+from pymysql import connect
 from collections import OrderedDict
 import operator
 import requests
@@ -19,13 +20,17 @@ Path = os.getenv("Path")
 
 # engine = create_engine('mysql+pymysql://'+User+':'+Password+'@localhost/JHT',echo = True)
 connection_string = 'mysql+pymysql://'+User+':'+Password+'@'+Host+':3306/JHT'
-engine = create_engine(connection_string,echo = True)
+engine = create_engine(connection_string,pool_recycle=3600)
 connection = engine.raw_connection()
 cursor = connection.cursor()
+# connection.ping(reconnect=True) 
+
+import time
+tod = time.time()
 
 # jobinfo
 def jobinfo(title):
-    cursor.execute("select job_id,company,position,url from job_raw where position LIKE %s order by savetime desc",'%'+title+'%')
+    cursor.execute("select job_id,company,position,url from job_raw where position LIKE %s and %s-savetime < 7*86400",('%'+title+'%',tod))
     jobinfo = cursor.fetchall()
     job_list = list()
     for each in jobinfo:
@@ -62,7 +67,7 @@ def job_score_old(job_id):
     score_list = list()
     # score_list.append({'SQL':score[0][0],'Python':score[0][1],'Java':score[0][2],'Spark':score[0][3],'AWS':score[0][4],'ETL':score[0][5]})
     score_list.append({'data':score})
-    print(score_list)
+    # print(score_list)
     return score_list
 # job_score_old('2548631341')
 
@@ -87,7 +92,7 @@ def job_score(job_id):
             # print(i)
             # print(score_list[0]['score'][i])
             if score_list[0]['score'][i] != 0:
-                print(skillset[i])
+                # print(skillset[i])
                 # print(score[0][i])
                 d[skillset[i]] = score_list[0]['score'][i]
                 # d[skillset[i]] = score[i]

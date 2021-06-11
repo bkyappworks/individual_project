@@ -16,11 +16,16 @@ User = os.getenv("User")
 Password = os.getenv("Password")
 Path = os.getenv("Path")
 
-engine = create_engine(
-    'mysql+pymysql://'+User+':'+Password+'@localhost/JHT',
-    echo = True)
+# engine = create_engine(
+#     'mysql+pymysql://'+User+':'+Password+'@localhost/JHT',
+#     echo = True)
+# connection = engine.raw_connection()
+# cursor = connection.cursor()
+connection_string = 'mysql+pymysql://'+User+':'+Password+'@'+Host+':3306/JHT'
+engine = create_engine(connection_string, echo = True, pool_recycle=3600)
 connection = engine.raw_connection()
 cursor = connection.cursor()
+cursor.execute("select job_id,position,company from job_raw limit 10")
 
 # test
 test = 3
@@ -29,6 +34,7 @@ job_id = '2550755919'
 import time
 cal_after = int(round(time.time()-86400*1,0))
 # print(cal_after)
+# print(time.time())
 
 # skill_score table
 
@@ -198,17 +204,17 @@ def save_exp(data):
 
 def cal_sim():
     # cursor.execute("drop table recommendation")
-    sql = """CREATE TABLE `recommendation` (
-    `id` int AUTO_INCREMENT,
-    `job1_id` varchar(255),
-    `job2_id` varchar(255),
-    `similarity` float,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`job1_id`) REFERENCES job_raw(`job_id`)
-    ) 
-    ENGINE=InnoDB DEFAULT CHARSET=utf8
-    """
-    cursor.execute(sql)
+    # sql = """CREATE TABLE `recommendation` (
+    # `id` int AUTO_INCREMENT,
+    # `job1_id` varchar(255),
+    # `job2_id` varchar(255),
+    # `similarity` float,
+    # PRIMARY KEY (`id`),
+    # FOREIGN KEY (`job1_id`) REFERENCES job_raw(`job_id`)
+    # ) 
+    # ENGINE=InnoDB DEFAULT CHARSET=utf8
+    # """
+    # cursor.execute(sql)
     insert_all = skill_score()
     # print(len(insert_all))
     sim = list()
@@ -288,10 +294,6 @@ def save_sim(data):
     print('Items save to db: ',back)
 # save successfully
 # save_sim(cal_sim())
-
-# cursor.execute("select * from recommendation where job1_id =  2580601490 order by similarity desc")
-# sc = cursor.fetchall()
-# print(sc)
 
 
 """

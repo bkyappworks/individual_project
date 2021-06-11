@@ -1,3 +1,5 @@
+import sqlalchemy
+from sqlalchemy import create_engine
 import os
 import pymysql
 from dotenv import load_dotenv
@@ -95,12 +97,12 @@ def getJD():
                 # print(details)
                 # t = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
                 data.append([JobId,position, company, location, hiringStatus, postTime,t,currentJobId,details])
+                # print([JobId,position, company, location, hiringStatus, postTime,t,currentJobId,details])
                 # data.append([position, company, location,hiringStatus,postTime])
                 print('-------------- Done this Job --------------')
             except:
                 continue
     return data
-
 # getJD()
 
 def saveJobs():
@@ -142,18 +144,22 @@ def saveDB(data):
     User = os.getenv("User")
     Password = os.getenv("Password")
     Path = os.getenv("Path")
-    connection = pymysql.connect(host=Host,
-                                user=User,
-                                password=Password,
-                                database='JHT',
-                                charset='utf8mb4',
-                                cursorclass=pymysql.cursors.DictCursor)
-    with connection:
-        cursor = connection.cursor()
-        back = cursor.executemany("INSERT IGNORE INTO job_raw (job_id,position,company,location,hiringstatus,posttime,savetime,url,description) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", data) 
-        # [position, company, location,hiringStatus,postTime,currentJobId,details]
-        connection.commit()
-        print('Items save to db: ',back)
-
-saveDB(scroll('Data Engineer','United States'))
+    # connection = pymysql.connect(host=Host,
+    #                             user=User,
+    #                             password=Password,
+    #                             database='JHT',
+    #                             charset='utf8mb4',
+    #                             cursorclass=pymysql.cursors.DictCursor)
+    connection_string = 'mysql+pymysql://'+User+':'+Password+'@'+Host+':3306/JHT'
+    engine = create_engine(connection_string,echo = True)
+    connection = engine.raw_connection()
+    # cursor = connection.cursor()
+    # print(cursor)
+    # with connection:
+    cursor = connection.cursor()
+    # data = [['2589941272', 'Data Engineer', 'Coca-Cola Beverages Florida', 'Orlando, FL', 'Be an early applicant', '3 hours ago', 1623229806.096464, 'https://www.linkedin.com/jobs/view/2589941272', "Orlando, FL, USA\nTampa, FL, USA Req #6759 Friday, June 4, 2021 Coca-Cola Beverages Florida, LLC (Coke Florida) is a family-owned independent Coca-Cola bottler that is the third largest privately-held and the sixth largest independent Coca-Cola bottler in the United States. Coke Florida's exclusive territory covers over 18 million consumers across 47 Florida counties, and includes the major metropolitan markets of Jacksonville, Miami, Orlando and Tampa. Coke Florida sells, markets, manufactures and distributes over 600 products of The Coca-Cola Company and other partner companies including Monster Beverage Corporation and BODYARMOR. In 2017, Coke Florida generated over $1.2 billion in revenue and the company currently has approximately 4,800 employees. As one of the first US greenfield independent Coca-Cola bottlers in nearly sixty years, Coke Florida is at an exciting stage in its transformational journey to become a leading-edge beverage company, the best bottler in the Coca-Cola System, and one of the best companies to work for in Florida. The Data Engineer is a key member of the Coke Florida Information Governance Organization responsible for supporting, managing, and optimizing data pipelines to support business/data analysts, data scientists or any persona that needs curated data for data and analytics use cases across the enterprise. Role Responsibilities\nBuild platforms and pipeline to enables teams to clearly and clearly analyze data, build models and drive decisions\nCreate, maintain, and optimize data pipelines within the Coke Florida system\nAssist with driving automation through effective metadata management, assist with renovating data management infrastructure to drive automation in data integration and management\nBecome a Subject Matter Expert (SME) on data within Coke Florida, how it flows through which systems and how it can interact with other systems\nParticipate in ensuring complete and governance during data use\nWork with various APIs to integrate with internal data models\nRole Requirements\nBachelor's or Master's degree in computer science, statistics, data management or equivalent work experience\n6+ years work experience in data management disciplines including data integration, modeling, optimization and data quality, and/or other areas directly to data engineering responsibilities and tasks\n3+ years experience working in cross-functional teams and collaborating with key stakeholders\nExperience with ETL, data replication, API design is highly desired\nExperience with SAP Snowflake highly desired\nExperience with cloud tools, such as Azure\nPrevious experience with data management architectures such as Data Warehouse, Data Lake, Data Hub and the supporting processes like Data Integration, Governance Metadata Management\nThis job description is not an exhaustive list of all functions that the employee may be required to perform, and the employee may be required to perform additional functions. Coke Florida reserves the right to revise the job description at any time. Employment with Coke Florida is at-will. The employee must be able to perform the essential functions of the position satisfactorily and, if requested, reasonable accommodations may be made to enable employees with disabilities to perform essential functions of their job, absent undue hardship.\n\nCoca-Cola Beverages Florida is an Equal Opportunity Employer and does not discriminate against any employee or applicant for employment because of race, color, sex, age, national origin, religion, sexual orientation, gender identity and/or expression, status as a veteran, and basis of disability or any other federal, state or local protected class.\n\nOther Details\nJob Family Technology/Transformation\nJob Function Information Governance\nPay Type Salary\nApply Now\nOrlando, FL, USA\nTampa, FL, USA\nShow less"]]
+    back = cursor.executemany("INSERT IGNORE INTO job_raw (job_id,position,company,location,hiringstatus,posttime,savetime,url,description) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", data) 
+    connection.commit()
+    print('Items save to db: ',back)
+saveDB(scroll('Data Analyst','United States')) # Data Scientist Fronend Engineer
 print('Done!')
