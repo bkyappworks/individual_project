@@ -33,7 +33,7 @@ job_id = '2550755919'
 
 import time
 cal_after = int(round(time.time()-86400*1,0))
-# print(cal_after)
+print(cal_after) # 1623412584 6/12
 # print(time.time())
 
 # skill_score table
@@ -97,7 +97,7 @@ def save_score(data):
     connection.commit()
     print('Items save to db: ',back)
 # save successfully
-# save_score(skill_score())
+save_score(skill_score())
 
 # skill_match table
 def skill_match_old():
@@ -141,9 +141,6 @@ def save_match_old(data): #INSERT INTO skill_match (`job_id`,`position`,`company
     connection.commit()
     print('Items save to db: ',back)
 
-# save successfully
-# save_match(skill_match())
-
 def work_years_required():
     all = list()
     cursor.execute("select job_id,description from job_raw where savetime > %s",cal_after) 
@@ -171,7 +168,7 @@ def save_year(data):
     connection.commit()
     print('Items save to db: ',back)
 # save successfully
-# save_year(work_years_required())
+save_year(work_years_required())
 
 def exp_required():
     all = list()
@@ -200,7 +197,7 @@ def save_exp(data):
     connection.commit()
     print('Items save to db: ',back)
 # save successfully
-# save_exp(exp_required())
+save_exp(exp_required())
 
 def cal_sim():
     # cursor.execute("drop table recommendation")
@@ -293,7 +290,7 @@ def save_sim(data):
     connection.commit()
     print('Items save to db: ',back)
 # save successfully
-# save_sim(cal_sim())
+save_sim(cal_sim())
 
 
 """
