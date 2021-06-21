@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Job Hunting Dashboard</title>
+        <!--  -->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/img/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Fontawesome -->
+    <!-- <link type="text/css" href="static/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" media="all"> -->
+
+    <!-- Notyf -->
+    <link type="text/css" href="static/vendor/notyf/notyf.min.css" rel="stylesheet" media="all">
+
+    <!-- Volt CSS -->
+    <!-- <link type="text/css" href="/css/volt.css" rel="stylesheet" media="all"> -->
+    <link type="text/css" href="static/css/volt.css" rel="stylesheet" media="all">
+    <style>
+        /* Adding some basic styling to button */
+        .btn {
+            text-decoration: none;
+            border: none;
+            padding: 12px 40px;
+            font-size: 16px;
+            background-color: lightblue;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
+            cursor: pointer;
+            outline: none;
+            transition: 0.2s all;
+        }
+        /* Adding transformation when the button is active */
+        .btn:active {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
+    </style>
+
+    </head>
+    <body>
+        <div class="row justify-content-md-center border-light shadow-sm">
+            <div class="card-header border-bottom border-light shadow-sm">
+                <div class="row align-items-center">
+                <h1>Quick Hunt</h1>
+                <h3>
+                    Job Hunting Dashboard
+                </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col-12 mb-4">
+                <div class="card-header">
+                    <div style="height: 350px;">
+                        <div>
+                            <h2 class="h5 mb-0">Google Search Trend</h2>
+                            <div class="col text-right">
+                                <a href="https://trends.google.com/trends/explore?geo=US&q=data%20engineer,data%20scientist,data%20analyst,software%20engineer" class="btn btn-sm btn-secondary">Click to see More</a>
+                            </div>
+                            <div class="card-body">
+                                <span>
+                                    <!-- <script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/2578_RC01/embed_loader.js"></script> 
+                                    <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"data engineer","geo":"US","time":"today 12-m"},{"keyword":"data scientist","geo":"US","time":"today 12-m"},{"keyword":"data analyst","geo":"US","time":"today 12-m"},{"keyword":"software engineer","geo":"US","time":"today 12-m"}],"category":0,"property":""}, {"exploreQuery":"geo=US&q=data%20engineer,data%20scientist,data%20analyst,software%20engineer&date=today 12-m,today 12-m,today 12-m,today 12-m","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>  -->
+                                </span>
+                            </div>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+                            <canvas id="lineChart" height="50px"></canvas>
+                        </div>
+                        <div class="d-block">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="row justify-content-md-center">
+            <div class="row">
+                <div class="col-12 col-xl-6 mb-4">
+                    <div class="row">
+                        <div class="col-12 mb-4" >
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h2 class="h5 mb-0">Latest Job Update</h2>
+                                        </div>
+                                        <div class="col text-right">
+                                            <div>
+                                                <label for="job-choose">Choose Job Category</label>
+                                                    <select id="job-choose" name="job-choose">
+                                                      <option value = "Data Engineer">Data Engineer</option>
+                                                      <option value = "Software Engineer">Software Engineer</option>
+                                                      <option value = "Data Scientist">Data Scientist</option>
+                                                      <option value = "Data Analyst">Data Analyst</option>
+                                                      <option value = "Front">Frontend Engineer</option>
+                                                    </select>
+                                                    <section class="joblist">
+                                                        <pre></pre>
+                                                    </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive" style="height: 820px;">
+                                    <table class="table align-items-center table-flush" >
+                                        <thead class="thead-light">
+                                            <tr style="width: 10px">
+                                                <div class="row align-items-center mb-4">
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row" class="joblist1"></th>
+                                                <td class="com" style="width: 10px">
+
+                                                </td>
+                                                <td class="url">
+
+                                                </td>
+                                                <ul class="btn1">
+
+                                                </ul>
+                                                <!-- <td class="btn1">
+                                                </td> -->
+                                            </tr>
+                                        </tbody>
+                                </div>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-12 col-xl-6 mb-4">
+                    <div class="col-12 px-0 mb-4">
+                        <div class="card bg-light border-light shadow-sm">
+                            <div class="card-header border-bottom border-light">
+                                <h2 class="h5 mb-0 ">Top Skills for the Job</h2>
+                            </div>
+                            <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                                <div class="d-block" style="height: 250px;"></div>
+                                <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script> -->
+                                <!-- <h3>Click "Skills Needed" to see more details </h3> -->
+                                <!-- here -->
+                                <!-- <div class="load-51">
+                                    <div class="ring-2">
+                                        <div class="ball-holder">
+                                            <div class="ball"></div>
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <canvas id="radarChart" style="height: 150px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-light shadow-sm w-60">
+                        <div class="card bg-dark text-white">
+                        <div class="card-header border-bottom border-light">
+                            <h2 class="h5 mb-0 ">Recommendations</h2>
+                        </div>
+                        <div class="card-body" style="height: 400px;">
+                            <div class="row align-items-center mb-2">
+                                <div>
+                                    <span class="icon icon-md text-purple"><span class="fab fa-react"></span></span>
+                                </div>
+                                <div class="load-5">
+                                    <div class="ring-2">
+                                        <div class="ball-holder">
+                                            <div class="ball"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <!-- <h3>Click "Similar Jobs" to see more details </h3> -->
+                                <div class="col rec1">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="card-header">
+                        <div style="height: 550px;">
+                            <div class="card border-light shadow-sm">
+                                <div class="card-header border-bottom border-light">
+                                    <h2 class="h5 mb-0 ">Trendy keywords</h2>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-12 col-sm-1 col-xl-3 mb-4">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between border-bottom border-light pb-3">
+                                                <div>
+                                                    <script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/2578_RC01/embed_loader.js"></script>
+                                                    <script type="text/javascript"> trends.embed.renderExploreWidget("RELATED_QUERIES_0", {"comparisonItem":[{"keyword":"data engineer","geo":"US","time":"today 12-m"},{"keyword":"data scientist","geo":"US","time":"today 12-m"},{"keyword":"data analyst","geo":"US","time":"today 12-m"},{"keyword":"software engineer","geo":"US","time":"today 12-m"}],"category":0,"property":""}, {"exploreQuery":"geo=US&q=data%20engineer,data%20scientist,data%20analyst,software%20engineer&date=today 12-m,today 12-m,today 12-m,today 12-m","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-1 col-xl-3 mb-4">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between border-bottom border-light pb-3">
+                                                <div>
+                                                    <script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/2578_RC01/embed_loader.js"></script>
+                                                    <script type="text/javascript"> trends.embed.renderExploreWidget("RELATED_QUERIES_1", {"comparisonItem":[{"keyword":"data engineer","geo":"US","time":"today 12-m"},{"keyword":"data scientist","geo":"US","time":"today 12-m"},{"keyword":"data analyst","geo":"US","time":"today 12-m"},{"keyword":"software engineer","geo":"US","time":"today 12-m"}],"category":0,"property":""}, {"exploreQuery":"geo=US&q=data%20engineer,data%20scientist,data%20analyst,software%20engineer&date=today 12-m,today 12-m,today 12-m,today 12-m","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-1 col-xl-3 mb-4">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between border-bottom border-light pb-3">
+                                                <div>
+                                                    <script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/2578_RC01/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("RELATED_QUERIES_2", {"comparisonItem":[{"keyword":"data engineer","geo":"US","time":"today 12-m"},{"keyword":"data scientist","geo":"US","time":"today 12-m"},{"keyword":"data analyst","geo":"US","time":"today 12-m"},{"keyword":"software engineer","geo":"US","time":"today 12-m"}],"category":0,"property":""}, {"exploreQuery":"geo=US&q=data%20engineer,data%20scientist,data%20analyst,software%20engineer&date=today 12-m,today 12-m,today 12-m,today 12-m","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-1 col-xl-3 mb-4">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between border-bottom border-light pb-3">
+                                                <div>
+                                                    <script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/2578_RC01/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("RELATED_QUERIES_3", {"comparisonItem":[{"keyword":"data engineer","geo":"US","time":"today 12-m"},{"keyword":"data scientist","geo":"US","time":"today 12-m"},{"keyword":"data analyst","geo":"US","time":"today 12-m"},{"keyword":"software engineer","geo":"US","time":"today 12-m"}],"category":0,"property":""}, {"exploreQuery":"geo=US&q=data%20engineer,data%20scientist,data%20analyst,software%20engineer&date=today 12-m,today 12-m,today 12-m,today 12-m","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="d-block">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </body>
+    <script src="{{ url_for('static', filename = 'js/app.js') }}"></script>
+
+</html>
+
+
+
+
+
+

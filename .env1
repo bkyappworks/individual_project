@@ -1,0 +1,4 @@
+Host = "localhost"
+User = "root"
+Password = "Myp@ss123"
+Path = "http://3.138.122.107/"

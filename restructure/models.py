@@ -57,31 +57,45 @@ def rec(selected_job):
         # rec_job_list.append(list(cursor.fetchall()[0]))
     # print(rec_job_list)
     return rec_job_list
-# print(rec('2546120842'))
-
-def job_score_old(job_id):
-    cursor.execute("select `SQL`,`Python`,`Java`,`Spark`,`AWS`,`ETL` from skill_match_radar where job_id = %s",job_id)
-    # cursor.execute("select `SQL`,`Python`,`Java`,`Spark`,`AWS`,`ETL` from skill_score where job_id = %s",'2546120842')
-    score = cursor.fetchall()
-    # print(score)
-    score_list = list()
-    # score_list.append({'SQL':score[0][0],'Python':score[0][1],'Java':score[0][2],'Spark':score[0][3],'AWS':score[0][4],'ETL':score[0][5]})
-    score_list.append({'data':score})
-    # print('score_list: ',score_list)
-    return score_list
-# job_score_old('2548631341')
+# print(rec('2546120842')) 
 
 def job_score(job_id):
-    skillset = [
-        'SQL','Python','Spark','AWS','Java','Hadoop','Hive','Scala','Kafka','NoSQL','Redshift',
-        'Azure','Linux','Tableau','Git','Cassandra','Airflow','Snowflake','Docker','MySQL','PostgreSQL',
-        'C++','MongoDB','GCP','Jenkins','data pipeline','data warehouse','data modeling','ETL','API','Perl',
-        'Tensorflow','Javascript','Keras','Html','Css'
-    ]  
+    # test = '2554018338' #2550746682,2546120842,2554018338
+    cursor.execute("select keyword_name,count from job_keywords join keywords on job_keywords.keyword_id = keywords.keyword_id where job_id = %s",job_id)
+    counts = cursor.fetchall()
+    # print(counts)
+    skills = list()
+    scores = list()
+    for i in counts:
+        if i[1] != 0:
+            skills.append(i[0])
+            scores.append(int(i[1]))
+    # sort dict
+    d = {'skills':skills,'scores':scores}
+    newd = dict()
+    for i in range(len(skills)):
+        newd[skills[i]] = scores[i]
+    sorted_d = dict(sorted(newd.items(), key=lambda item: item[1], reverse=True))
+    # print(sorted_d)
+    sorted_d = OrderedDict(sorted_d)
+    keys = list(sorted_d)[0:5]
+    # print(keys)
+    items = list()
+    for item in keys:
+        items.append(sorted_d[item])
+    # print(items)
+    # print({'skills':keys,'scores':items})
+    return {'skills':keys,'scores':items}
+# print(job_score('2546120842'))
+# print(job_score('2550746682'))
+# print(job_score('2507709258'))
+# {'skills': ['SQL', 'Python', 'Scala', 'ETL'], 'scores': [1.0, 1.0, 1.0, 1.0]}
+# {'skills': ['SQL', 'Spark', 'data pipeline', 'Python', 'AWS'], 'scores': [1.25, 1.25, 1.25, 0.625, 0.625]}
+def job_score_old(job_id):
     # cursor.execute("select `job_id`,`SQL`,`Python` ,`Spark`,`AWS`,`Java`,`Hadoop`,`Hive`, `Scala` ,`Kafka` ,`NoSQL` ,`Redshift` ,`Azure` ,`Linux` ,`Tableau` ,`Git` ,`Cassandra` ,`Airflow` ,`Snowflake` ,`Docker` ,`MySQL` ,`PostgreSQL` ,`C++` ,`MongoDB` ,`GCP` ,`Jenkins` ,`data pipeline` ,`data warehouse` ,`data modeling` ,`ETL` ,`API` ,`Perl` ,`Tensorflow` ,`Javascript` ,`Keras` from skill_score where job_id = %s",'2539683107') #2539683107,2546120842
     cursor.execute("select `job_id`,`SQL`,`Python` ,`Spark`,`AWS`,`Java`,`Hadoop`,`Hive`, `Scala` ,`Kafka` ,`NoSQL` ,`Redshift` ,`Azure` ,`Linux` ,`Tableau` ,`Git` ,`Cassandra` ,`Airflow` ,`Snowflake` ,`Docker` ,`MySQL` ,`PostgreSQL` ,`C++` ,`MongoDB` ,`GCP` ,`Jenkins` ,`data pipeline` ,`data warehouse` ,`data modeling` ,`ETL` ,`API` ,`Perl` ,`Tensorflow` ,`Javascript` ,`Keras` ,`Html`,`Css` from skill_score where job_id = %s",job_id)
     score = cursor.fetchall()
-    # print(score)
+    # print(score) #(('2546120842', 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),)
     score_list = list()
     items = list()
     try: 
@@ -89,13 +103,8 @@ def job_score(job_id):
         # print(score_list)
         d = dict()
         for i in range(len(score_list[0]['score'])):
-            # print(i)
-            # print(score_list[0]['score'][i])
             if score_list[0]['score'][i] != 0:
-                # print(skillset[i])
-                # print(score[0][i])
                 d[skillset[i]] = score_list[0]['score'][i]
-                # d[skillset[i]] = score[i]
         # print(d)
         sorted_d = dict(sorted(d.items(), key=operator.itemgetter(1),reverse=True))
         sorted_d = OrderedDict(sorted_d)
@@ -116,10 +125,9 @@ def job_score(job_id):
         new_items.append(i/mean) # normalize
     # print(new_items)
     # print(type(sorted_d)) #<class 'collections.OrderedDict'>
-    print({'skills':keys,'scores':new_items})
+    # print({'skills':keys,'scores':new_items})
     return {'skills':keys,'scores':new_items}
-# job_score('2546120842')
-job_score('2550746682')
+
 def trend():
     today = str(date.today())
     last_year = str(datetime.now() - relativedelta(years=1))[:10]
