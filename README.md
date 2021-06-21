@@ -41,7 +41,7 @@ https://bkyproductjobhuntingdashboard.com/
 <li> Redirect port requests from clients by NGINX
 <li> Display information of API through AJAX 
 
-![image](https://github.com/bkyappworks/individual_project/blob/master/images/architeture.png)
+![image](https://github.com/bkyappworks/individual_project/blob/master/images/Architeture.png)
 <h2>Database</h2>
 
 ![image](https://github.com/bkyappworks/individual_project/blob/master/images/database_design.png)
