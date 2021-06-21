@@ -50,8 +50,8 @@ def jobinfo():
         # trend
         trend = models.trend()
 
-        return {'jobinfo':jobinfo,'recommend':recommend,'score':score,'trend':trend} #,'trend':trend
-        # return {'jobinfo':jobinfo,'recommend':recommend,'score':score}
+        # return {'jobinfo':jobinfo,'recommend':recommend,'score':score,'trend':trend} #,'trend':trend
+        return {'jobinfo':jobinfo,'recommend':recommend,'score':score}
 
 @app.route('/test', methods=('GET', 'POST'))
 def test(): 
