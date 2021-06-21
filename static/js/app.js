@@ -1,4 +1,4 @@
-console.log('https://bkyproductjobhuntingdashboard.com/')
+console.log('Hello!!!')
 const hov  = document.querySelector(".hov") 
 const jobList = document.querySelector(".joblist") //jobList
 //try
@@ -51,7 +51,7 @@ jobChoose.onchange = function() {
 };
 
 function updateDisplay(job) {
-    let url = 'https://bkyproductjobhuntingdashboard.com/jobinfo'+'?type='+job; 
+    let url = 'http://0.0.0.0:3000/jobinfo'+'?type='+job; 
     let request = new XMLHttpRequest();
     request.open('GET', url);
     request.responseType = 'text';
@@ -79,65 +79,65 @@ function updateDisplay(job) {
 
         //line chart
 
-        // let trendArray = dataparse['trend']
-        // var ctxL = document.getElementById("lineChart").getContext('2d');
-        // var myLineChart = new Chart(ctxL, {
-        // type: 'line',
-        // data: {
-        //     labels: JSON.parse(trendArray[0])["time"], //["January", "February", "March", "April", "May", "June", "July"]
-        //     datasets: [
-        //         {
-        //             label: "Data Engineer",
-        //             data: JSON.parse(trendArray[0])["de"], //[65, 59, 80, 81, 56, 55, 40]
-        //             backgroundColor: [
-        //                 'rgba(24, 78, 119, .2)',
-        //                 ],
-        //                 borderColor: [
-        //                 'rgba(24, 78, 119, .7)',
-        //             ],
-        //             borderWidth: 2
-        //         },
-        //         {
-        //             label: "Data Scientist",
-        //             data: JSON.parse(trendArray[0])["ds"], 
-        //             backgroundColor: [
-        //                 'rgba(22, 138, 173, .2)',
-        //                 ],
-        //             borderColor: [
-        //             'rgba(22, 138, 173, .7)',
-        //             ],
-        //             borderWidth: 2
-        //         },
-        //         {
-        //             label: "Data Analyst",
-        //             data: JSON.parse(trendArray[0])["da"], 
-        //             backgroundColor: [
-        //                 'rgba(52, 160, 164, .2)',
-        //                 ],
-        //                 borderColor: [
-        //                 'rgba(52, 160, 164, .7)',
-        //                 ]
-        //             ,
-        //             borderWidth: 2
-        //         },
-        //         {
-        //             label: "Software Engineer",
-        //             data: JSON.parse(trendArray[0])["se"], 
-        //             backgroundColor: [
-        //                 'rgba(82, 182, 154, .2)',
-        //                 ],
-        //                 borderColor: [
-        //                 'rgba(82, 182, 154, .7)',
-        //                 ]
-        //             ,
-        //             borderWidth: 2
-        //         }
-        //     ]
-        // },
-        // options: {
-        //     responsive: true
-        // }
-        // });
+        let trendArray = dataparse['trend']
+        var ctxL = document.getElementById("lineChart").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+            labels: JSON.parse(trendArray[0])["time"], //["January", "February", "March", "April", "May", "June", "July"]
+            datasets: [
+                {
+                    label: "Data Engineer",
+                    data: JSON.parse(trendArray[0])["de"], //[65, 59, 80, 81, 56, 55, 40]
+                    backgroundColor: [
+                        'rgba(24, 78, 119, .2)',
+                        ],
+                        borderColor: [
+                        'rgba(24, 78, 119, .7)',
+                    ],
+                    borderWidth: 2
+                },
+                {
+                    label: "Data Scientist",
+                    data: JSON.parse(trendArray[0])["ds"], 
+                    backgroundColor: [
+                        'rgba(22, 138, 173, .2)',
+                        ],
+                    borderColor: [
+                    'rgba(22, 138, 173, .7)',
+                    ],
+                    borderWidth: 2
+                },
+                {
+                    label: "Data Analyst",
+                    data: JSON.parse(trendArray[0])["da"], 
+                    backgroundColor: [
+                        'rgba(52, 160, 164, .2)',
+                        ],
+                        borderColor: [
+                        'rgba(52, 160, 164, .7)',
+                        ]
+                    ,
+                    borderWidth: 2
+                },
+                {
+                    label: "Software Engineer",
+                    data: JSON.parse(trendArray[0])["se"], 
+                    backgroundColor: [
+                        'rgba(82, 182, 154, .2)',
+                        ],
+                        borderColor: [
+                        'rgba(82, 182, 154, .7)',
+                        ]
+                    ,
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true
+        }
+        });
         
         for (let [key, value] of Object.entries(jobsArray)) {
             // console.log("key: ",key,"value: ", value);
@@ -177,7 +177,7 @@ function updateDisplay(job) {
                 nano.style.display = 'inline';
                 const jobid = jobsArray[key]['job_id'];
                 // const jobid = node_btn.value
-                let url1 = 'https://bkyproductjobhuntingdashboard.com/jobinfo?type='+job+'&choosejob='+jobid
+                let url1 = 'http://0.0.0.0:3000/jobinfo?type='+job+'&choosejob='+jobid
                 // console.log('url1: '+url1)
                 // console.log ('job_id: '+jobid);
                 let request1 = new XMLHttpRequest();
@@ -237,7 +237,7 @@ function updateDisplay(job) {
                 // nano1.style.display = 'inline';
                 
                 const jobid = jobsArray[key]['job_id'];
-                let url2 = 'https://bkyproductjobhuntingdashboard.com/jobinfo?type='+job+'&choosejob='+jobid+'&score='+jobid
+                let url2 = 'http://0.0.0.0:3000/jobinfo?type='+job+'&choosejob='+jobid+'&score='+jobid
                 let request2 = new XMLHttpRequest();
                 request2.open('GET', url2);
                 request2.responseType = 'text';

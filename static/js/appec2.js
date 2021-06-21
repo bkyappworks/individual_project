@@ -1,5 +1,4 @@
 console.log('https://bkyproductjobhuntingdashboard.com/')
-const hov  = document.querySelector(".hov") 
 const jobList = document.querySelector(".joblist") //jobList
 //try
 const jobList1 = document.querySelector(".joblist1")
@@ -8,8 +7,8 @@ const urlList1 = document.querySelector(".url")
 const btnList1 = document.querySelector(".btn1")
 let nano = document.querySelector(".load-5");
 nano.style.display = 'none';
-// let nano1 = document.querySelector(".load-51");
-// nano1.style.display = 'none';
+let nano1 = document.querySelector(".load-51");
+nano1.style.display = 'none';
 
 //rec
 const recList = document.querySelector(".reclist") //<section class="reclist">
@@ -18,32 +17,6 @@ const jobChoose = document.querySelector('select'); //jobChoose
 //rec
 // const jobRec = document.querySelector('.get-rec');
 // const jobDisplay = document.querySelector('pre');
-
-//default
-var ctxR = document.getElementById("radarChart").getContext('2d');
-var myRadarChart = new Chart(ctxR, {
-    type: 'radar',
-    data: {
-    labels: ['SQL','Python','ETL','Javascript','Spark'],
-    datasets: [
-        {
-            label: "Default, click Skills Need to see real skillsets",
-            data: [1,1,1,0,0], //65, 59, 90, 81, 56, 55, 40
-            backgroundColor: [
-            'rgba(61, 90, 128, .5)',
-            ],
-            borderColor: [
-            'rgba(61, 90, 128, 1)',
-            ],
-            borderWidth: 2
-        }
-    ]
-    },
-    options: 
-    {
-        responsive: true
-    }
-});
 
 jobChoose.onchange = function() {
     const job = jobChoose.value;
@@ -79,66 +52,94 @@ function updateDisplay(job) {
 
         //line chart
 
-        // let trendArray = dataparse['trend']
-        // var ctxL = document.getElementById("lineChart").getContext('2d');
-        // var myLineChart = new Chart(ctxL, {
-        // type: 'line',
-        // data: {
-        //     labels: JSON.parse(trendArray[0])["time"], //["January", "February", "March", "April", "May", "June", "July"]
-        //     datasets: [
-        //         {
-        //             label: "Data Engineer",
-        //             data: JSON.parse(trendArray[0])["de"], //[65, 59, 80, 81, 56, 55, 40]
-        //             backgroundColor: [
-        //                 'rgba(24, 78, 119, .2)',
-        //                 ],
-        //                 borderColor: [
-        //                 'rgba(24, 78, 119, .7)',
-        //             ],
-        //             borderWidth: 2
-        //         },
-        //         {
-        //             label: "Data Scientist",
-        //             data: JSON.parse(trendArray[0])["ds"], 
-        //             backgroundColor: [
-        //                 'rgba(22, 138, 173, .2)',
-        //                 ],
-        //             borderColor: [
-        //             'rgba(22, 138, 173, .7)',
-        //             ],
-        //             borderWidth: 2
-        //         },
-        //         {
-        //             label: "Data Analyst",
-        //             data: JSON.parse(trendArray[0])["da"], 
-        //             backgroundColor: [
-        //                 'rgba(52, 160, 164, .2)',
-        //                 ],
-        //                 borderColor: [
-        //                 'rgba(52, 160, 164, .7)',
-        //                 ]
-        //             ,
-        //             borderWidth: 2
-        //         },
-        //         {
-        //             label: "Software Engineer",
-        //             data: JSON.parse(trendArray[0])["se"], 
-        //             backgroundColor: [
-        //                 'rgba(82, 182, 154, .2)',
-        //                 ],
-        //                 borderColor: [
-        //                 'rgba(82, 182, 154, .7)',
-        //                 ]
-        //             ,
-        //             borderWidth: 2
-        //         }
-        //     ]
-        // },
-        // options: {
-        //     responsive: true
-        // }
-        // });
+        let trendArray = dataparse['trend']
+        var ctxL = document.getElementById("lineChart").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+            labels: JSON.parse(trendArray[0])["time"], //["January", "February", "March", "April", "May", "June", "July"]
+            datasets: [
+                {
+                    label: "Data Engineer",
+                    data: JSON.parse(trendArray[0])["de"], //[65, 59, 80, 81, 56, 55, 40]
+                    backgroundColor: [
+                        'rgba(24, 78, 119, .2)',
+                        ],
+                        borderColor: [
+                        'rgba(24, 78, 119, .7)',
+                    ],
+                    borderWidth: 2
+                },
+                {
+                    label: "Data Scientist",
+                    data: JSON.parse(trendArray[0])["ds"], 
+                    backgroundColor: [
+                        'rgba(22, 138, 173, .2)',
+                        ],
+                    borderColor: [
+                    'rgba(22, 138, 173, .7)',
+                    ],
+                    borderWidth: 2
+                },
+                {
+                    label: "Data Analyst",
+                    data: JSON.parse(trendArray[0])["da"], 
+                    backgroundColor: [
+                        'rgba(52, 160, 164, .2)',
+                        ],
+                        borderColor: [
+                        'rgba(52, 160, 164, .7)',
+                        ]
+                    ,
+                    borderWidth: 2
+                },
+                {
+                    label: "Software Engineer",
+                    data: JSON.parse(trendArray[0])["se"], 
+                    backgroundColor: [
+                        'rgba(82, 182, 154, .2)',
+                        ],
+                        borderColor: [
+                        'rgba(82, 182, 154, .7)',
+                        ]
+                    ,
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true
+        }
+        });
         
+        //default
+        var ctxR = document.getElementById("radarChart").getContext('2d');
+            
+                    var myRadarChart = new Chart(ctxR, {
+                        type: 'radar',
+                        data: {
+                        labels: ['SQL','Python','ETL','Javascript','Spark'],
+                        datasets: [
+                            {
+                                label: "Default, click Skills Need to see real skillsets",
+                                data: [1,1,1,0,0], //65, 59, 90, 81, 56, 55, 40
+                                backgroundColor: [
+                                'rgba(61, 90, 128, .5)',
+                                ],
+                                borderColor: [
+                                'rgba(61, 90, 128, 1)',
+                                ],
+                                borderWidth: 2
+                            }
+                        ]
+                        },
+                        options: 
+                        {
+                            responsive: true
+                        }
+                    });
+        
+
         for (let [key, value] of Object.entries(jobsArray)) {
             // console.log("key: ",key,"value: ", value);
             // console.log(jobsArray[key]);
@@ -173,7 +174,6 @@ function updateDisplay(job) {
 
             //click rec button
             node_btn.addEventListener('click', function() {
-                // nano1.style.display = 'none';
                 nano.style.display = 'inline';
                 const jobid = jobsArray[key]['job_id'];
                 // const jobid = node_btn.value
@@ -227,16 +227,11 @@ function updateDisplay(job) {
             });
 
             //click radarChart
-            node_btn1.addEventListener('click', function() {                
-                // myRadarChart.reset();
-                // myRadarChart.destroy();
-                // ctxR.innerHTML = '';
-                // ctxR.style.display = 'none';
-                // myRadarChart.style.display = 'none';
-                // let nano1 = document.querySelector(".load-51");
-                // nano1.style.display = 'inline';
-                
+            node_btn1.addEventListener('click', function() {
+                nano1.style.display = 'inline';
                 const jobid = jobsArray[key]['job_id'];
+                // console.log(jobid)
+                // const scoreid = jobsArray[key]['job_id'];
                 let url2 = 'https://bkyproductjobhuntingdashboard.com/jobinfo?type='+job+'&choosejob='+jobid+'&score='+jobid
                 let request2 = new XMLHttpRequest();
                 request2.open('GET', url2);
@@ -247,10 +242,12 @@ function updateDisplay(job) {
                     let dataparse2 = JSON.parse(data2); 
                     // console.log(dataparse2)
                     let scoreArray = dataparse2['score']
-                    // nano1.style.display = 'none';
-                    // nano1.remove()
+                    nano1.style.display = 'none';
+                    // console.log(scoreArray['scores']) 
+                    // console.log(scoreArray['skills']) 
+
                     var ctxR = document.getElementById("radarChart").getContext('2d');
-                    console.log(ctxR)
+            
                     var myRadarChart = new Chart(ctxR, {
                         type: 'radar',
                         data: {
@@ -274,12 +271,10 @@ function updateDisplay(job) {
                             responsive: true
                         }
                     });
-                    // ctxR.remove();
-                    // myRadarChart.clear();
-                
             
             };
                 request2.send();
+
 
         });
     

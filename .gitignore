@@ -1,4 +1,5 @@
 *.env
+*.env1
 # JPEG
 *.jpg
 *.jpeg
