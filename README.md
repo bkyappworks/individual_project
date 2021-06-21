@@ -7,7 +7,7 @@
 <h2>Website </h2>
 https://bkyproductjobhuntingdashboard.com/ 
 
-<h2>Technolog</h2>
+<h2>Technology</h2>
 
 <h3>Backend</h3>
 <li>Python
