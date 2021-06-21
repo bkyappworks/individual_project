@@ -13,3 +13,4 @@
 *.json
 *.csv
 *.unix
+*.DS_Store

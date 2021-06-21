@@ -33,15 +33,26 @@ https://bkyproductjobhuntingdashboard.com/
 <li>Test: Unittest
 <li>Agile: Trello (Scrum)
 
-<h3>Database</h3>
+<h3>Database Design</h3>
 <li>MySQL
 
 <h2>Architecture</h2>
+<li> Build flask as server and deploy server on AWS EC2
+<li> Redirect port requests from clients by NGINX
+<li> Display information of API through AJAX 
 
-![image](https://github.com/bkyappworks/individual_project/blob/master/images/Architeture.png)
+![image](https://github.com/bkyappworks/individual_project/blob/master/images/architeture.png)
 <h2>Database</h2>
 
 ![image](https://github.com/bkyappworks/individual_project/blob/master/images/database_design.png)
-<h2>Data Flow</h2>
 
-![image](https://github.com/bkyappworks/individual_project/blob/master/images/Data%20Flow.png)
+<h2>Data Flow</h2>
+<li> Scrap jobs from Linkedin and Indeed by selenium and beautifulsoup
+<li> Implement Airflow to automate scraping once a week
+<li> Use ETL to clean and extract data from job description and save to AWS RDS
+
+![image](https://github.com/bkyappworks/individual_project/blob/master/images/data_flow.png)
+
+<h2>Contact</h2>
+
+beckyappworks@gmail.com
