@@ -1,7 +1,7 @@
 # Quick Hunt - Your Job Hunting Dashboard
 <h2>A Dashboard That: </h2>
-<li> Automatically scrap and demonstrate new job posting from linkedin and indeed </li>
-<li> Show top skills for each job at a glance by extracting and analyzing data from (usually vey long) job discriptions </li>
+<li> Automatically scrap and demonstrate new job postings from linkedin and Indeed </li>
+<li> Show top skills for each job at a glance by extracting and analyzing data from (usually very long) job descriptions </li>
 <li> Provide information not only about jobs but also the entire job searching trends based on Google Trend </li>
 
 <h2>Website </h2>
@@ -38,9 +38,9 @@ https://bkyproductjobhuntingdashboard.com/
 
 <h2>Architecture</h2>
 <li> Build flask as server and deploy server on AWS EC2
-<li> Redirect port requests from clients by NGINX
 <li> Display information of API through AJAX 
 <li> Implement Airflow to automate scraping once a week
+<!-- Redirect port requests from clients by NGINX -->
 
 ![image](https://github.com/bkyappworks/individual_project/blob/master/images/Architeture.png)
 <h2>Database</h2>
