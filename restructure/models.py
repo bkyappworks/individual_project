@@ -30,8 +30,10 @@ tod = time.time()
 
 # jobinfo
 def jobinfo(title):
+    cursor = connection.cursor()
     cursor.execute("select job_id,company,position,url from job_raw where position LIKE %s and %s-savetime < 7*86400",('%'+title+'%',tod))
     jobinfo = cursor.fetchall()
+    cursor.close()
     job_list = list()
     for each in jobinfo:
         job_list.append({'job_id':each[0] ,'company':each[1],'position':each[2],'url':each[3]})
@@ -39,9 +41,11 @@ def jobinfo(title):
 
 # rec
 def rec(selected_job):
+    cursor = connection.cursor()
     cursor.execute("select job2_id from recommendation where job1_id = %s order by similarity desc limit 2,5",selected_job) #job1_id
     # cursor.execute("select job2_id from recommendation where job1_id = %s order by similarity desc limit 2,5",'2546120842')
     rec_id = cursor.fetchall()
+    cursor.close()
     # print(rec_id)
     rec_id_list = list()
     for id in rec_id:
@@ -51,8 +55,10 @@ def rec(selected_job):
     rec_job_list = list()
     for i in rec_id_list:
         # print(i)
+        cursor = connection.cursor()
         cursor.execute("select company,position,url from job_raw where job_id = %s",i)
         j = cursor.fetchall()
+        cursor.close()
         rec_job_list.append({'company':j[0][0],'position':j[0][1],'url':j[0][2]})
         # rec_job_list.append(list(cursor.fetchall()[0]))
     # print(rec_job_list)
@@ -61,8 +67,10 @@ def rec(selected_job):
 
 def job_score(job_id):
     # test = '2554018338' #2550746682,2546120842,2554018338
+    cursor = connection.cursor()
     cursor.execute("select keyword_name,count from job_keywords join keywords on job_keywords.keyword_id = keywords.keyword_id where job_id = %s",job_id)
     counts = cursor.fetchall()
+    cursor.close()
     # print(counts)
     skills = list()
     scores = list()
@@ -93,8 +101,10 @@ def job_score(job_id):
 # {'skills': ['SQL', 'Spark', 'data pipeline', 'Python', 'AWS'], 'scores': [1.25, 1.25, 1.25, 0.625, 0.625]}
 def job_score_old(job_id):
     # cursor.execute("select `job_id`,`SQL`,`Python` ,`Spark`,`AWS`,`Java`,`Hadoop`,`Hive`, `Scala` ,`Kafka` ,`NoSQL` ,`Redshift` ,`Azure` ,`Linux` ,`Tableau` ,`Git` ,`Cassandra` ,`Airflow` ,`Snowflake` ,`Docker` ,`MySQL` ,`PostgreSQL` ,`C++` ,`MongoDB` ,`GCP` ,`Jenkins` ,`data pipeline` ,`data warehouse` ,`data modeling` ,`ETL` ,`API` ,`Perl` ,`Tensorflow` ,`Javascript` ,`Keras` from skill_score where job_id = %s",'2539683107') #2539683107,2546120842
+    cursor = connection.cursor()
     cursor.execute("select `job_id`,`SQL`,`Python` ,`Spark`,`AWS`,`Java`,`Hadoop`,`Hive`, `Scala` ,`Kafka` ,`NoSQL` ,`Redshift` ,`Azure` ,`Linux` ,`Tableau` ,`Git` ,`Cassandra` ,`Airflow` ,`Snowflake` ,`Docker` ,`MySQL` ,`PostgreSQL` ,`C++` ,`MongoDB` ,`GCP` ,`Jenkins` ,`data pipeline` ,`data warehouse` ,`data modeling` ,`ETL` ,`API` ,`Perl` ,`Tensorflow` ,`Javascript` ,`Keras` ,`Html`,`Css` from skill_score where job_id = %s",job_id)
     score = cursor.fetchall()
+    cursor.close()
     # print(score) #(('2546120842', 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),)
     score_list = list()
     items = list()
@@ -145,36 +155,36 @@ def trend():
     content = request.text
 
     # read file
-    with open ("json_us.txt", "r",encoding="utf-8") as f:
-        content = f.read()
+    # with open ("json_us.txt", "r",encoding="utf-8") as f:
+    #     content = f.read()
 
-    true = 'true'
-    contents = json.loads(content[6:])
-    contents = contents['default']['timelineData']
-    # print(len(contents)) # 52
-    trends = list()
-    de = list()
-    ds = list()
-    da = list()
-    se = list()
-    t = list()
-    for week in range(len(contents)):
-        value_list = contents[week]['formattedValue']
-        value_list = list(map(int, value_list))
-        # print(value_list)
-        time = contents[week]['formattedAxisTime']
-        time = json.dumps(time)
-        # trends.append(json.dumps({"value":value_list,"time":time}))
-        # trends.append(json.dumps({"dataengineer":value_list[0],"datascientist":value_list[1],"dataanalyst":value_list[2],"softwareengineer":value_list[3],"time":time}))
+    # true = 'true'
+    # contents = json.loads(content[6:])
+    # contents = contents['default']['timelineData']
+    # # print(len(contents)) # 52
+    # trends = list()
+    # de = list()
+    # ds = list()
+    # da = list()
+    # se = list()
+    # t = list()
+    # for week in range(len(contents)):
+    #     value_list = contents[week]['formattedValue']
+    #     value_list = list(map(int, value_list))
+    #     # print(value_list)
+    #     time = contents[week]['formattedAxisTime']
+    #     time = json.dumps(time)
+    #     # trends.append(json.dumps({"value":value_list,"time":time}))
+    #     # trends.append(json.dumps({"dataengineer":value_list[0],"datascientist":value_list[1],"dataanalyst":value_list[2],"softwareengineer":value_list[3],"time":time}))
         
-        de.append(value_list[0])
-        ds.append(value_list[1])
-        da.append(value_list[2])
-        se.append(value_list[3])
-        time = contents[week]['formattedAxisTime']
-        t.append(json.dumps(time))
-    trends.append(json.dumps({'de':de,'ds':ds,'da':da,'se':se,'time':t}))
-    return trends
+    #     de.append(value_list[0])
+    #     ds.append(value_list[1])
+    #     da.append(value_list[2])
+    #     se.append(value_list[3])
+    #     time = contents[week]['formattedAxisTime']
+    #     t.append(json.dumps(time))
+    # trends.append(json.dumps({'de':de,'ds':ds,'da':da,'se':se,'time':t}))
+    # return trends
 
 
 

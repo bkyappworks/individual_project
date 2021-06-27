@@ -8,7 +8,7 @@ load_dotenv()
 from selenium import webdriver
 import time
 from selenium.webdriver.common.keys import Keys
-from urllib.request import urlopen
+# from urllib.request import urlopen
 # from bs4 import BeautifulSoup
 import requests
 import random
