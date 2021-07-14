@@ -18,19 +18,18 @@ User = os.getenv("User")
 Password = os.getenv("Password")
 Path = os.getenv("Path")
 
-# engine = create_engine('mysql+pymysql://'+User+':'+Password+'@localhost/JHT',echo = True)
 connection_string = 'mysql+pymysql://'+User+':'+Password+'@'+Host+':3306/JHT'
-engine = create_engine(connection_string,pool_recycle=3600)
+# engine = create_engine(connection_string,pool_recycle=3600,pool_size=20, max_overflow=0)
+engine = create_engine(connection_string,pool_pre_ping=True)
 connection = engine.raw_connection()
-cursor = connection.cursor()
-# connection.ping(reconnect=True) 
 
 import time
 tod = time.time()
 
 # jobinfo
 def jobinfo(title):
-    cursor = connection.cursor()
+    connection.ping(reconnect = True) 
+    cursor = connection.cursor() 
     cursor.execute("select job_id,company,position,url from job_raw where position LIKE %s and %s-savetime < 7*86400",('%'+title+'%',tod))
     jobinfo = cursor.fetchall()
     cursor.close()
@@ -41,7 +40,8 @@ def jobinfo(title):
 
 # rec
 def rec(selected_job):
-    cursor = connection.cursor()
+    connection.ping(reconnect = True) 
+    cursor = connection.cursor() 
     cursor.execute("select job2_id from recommendation where job1_id = %s order by similarity desc limit 2,5",selected_job) #job1_id
     # cursor.execute("select job2_id from recommendation where job1_id = %s order by similarity desc limit 2,5",'2546120842')
     rec_id = cursor.fetchall()
@@ -54,8 +54,8 @@ def rec(selected_job):
 
     rec_job_list = list()
     for i in rec_id_list:
-        # print(i)
-        cursor = connection.cursor()
+        connection.ping(reconnect = True) 
+        cursor = connection.cursor() 
         cursor.execute("select company,position,url from job_raw where job_id = %s",i)
         j = cursor.fetchall()
         cursor.close()
@@ -67,7 +67,8 @@ def rec(selected_job):
 
 def job_score(job_id):
     # test = '2554018338' #2550746682,2546120842,2554018338
-    cursor = connection.cursor()
+    connection.ping(reconnect = True) 
+    cursor = connection.cursor() 
     cursor.execute("select keyword_name,count from job_keywords join keywords on job_keywords.keyword_id = keywords.keyword_id where job_id = %s",job_id)
     counts = cursor.fetchall()
     cursor.close()
@@ -143,48 +144,9 @@ def trend():
     last_year = str(datetime.now() - relativedelta(years=1))[:10]
     start_date = last_year
     end_data = today
-    # 5/29
     url = 'https://trends.google.com/trends/api/widgetdata/multiline?hl=en-US&tz=-480&req=%7B%22time%22:%222020-05-29+2021-05-29%22,%22resolution%22:%22WEEK%22,%22locale%22:%22zh-TW%22,%22comparisonItem%22:%5B%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+engineer%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+scientist%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+analyst%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22software+engineer%22%7D%5D%7D%7D%5D,%22requestOptions%22:%7B%22property%22:%22%22,%22backend%22:%22IZG%22,%22category%22:0%7D%7D&token=APP6_UEAAAAAYLM98k6S8y20_KRmlJ8IpYRjn5PGZVeT&tz=-480'
-    # 5/28
-    # url = 'https://trends.google.com/trends/api/widgetdata/multiline?hl=en-US&tz=-480&req=%7B%22time%22:%222020-05-28+2021-05-28%22,%22resolution%22:%22WEEK%22,%22locale%22:%22zh-TW%22,%22comparisonItem%22:%5B%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+engineer%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+scientist%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+analyst%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22software+engineer%22%7D%5D%7D%7D%5D,%22requestOptions%22:%7B%22property%22:%22%22,%22backend%22:%22IZG%22,%22category%22:0%7D%7D&token=APP6_UEAAAAAYLGowr6zKvwGl3Lm9NEpeOgsAeWTGggX&tz=-480'
-    # 5/27
-    # url = 'https://trends.google.com/trends/api/widgetdata/multiline?hl=en-US&tz=-480&req=%7B%22time%22:%222020-05-27+2021-05-27%22,%22resolution%22:%22WEEK%22,%22locale%22:%22zh-TW%22,%22comparisonItem%22:%5B%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+engineer%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+scientist%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+analyst%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22software+engineer%22%7D%5D%7D%7D%5D,%22requestOptions%22:%7B%22property%22:%22%22,%22backend%22:%22IZG%22,%22category%22:0%7D%7D&token=APP6_UEAAAAAYLBtT0WEXyLvc0VrQnsoQPv9xnMyLkLv&tz=-480'
-    # with day as parameter
-    # url = 'https://trends.google.com/trends/api/widgetdata/multiline?hl=en-US&tz=-480&req=%7B%22time%22:%22'+last_year+'+'+today+'%22,%22resolution%22:%22WEEK%22,%22locale%22:%22zh-TW%22,%22comparisonItem%22:%5B%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+engineer%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+scientist%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22data+analyst%22%7D%5D%7D%7D,%7B%22geo%22:%7B%22country%22:%22US%22%7D,%22complexKeywordsRestriction%22:%7B%22keyword%22:%5B%7B%22type%22:%22BROAD%22,%22value%22:%22software+engineer%22%7D%5D%7D%7D%5D,%22requestOptions%22:%7B%22property%22:%22%22,%22backend%22:%22IZG%22,%22category%22:0%7D%7D&token=APP6_UEAAAAAYLBtT0WEXyLvc0VrQnsoQPv9xnMyLkLv&tz=-480'
     request = requests.get(url)
     content = request.text
-
-    # read file
-    # with open ("json_us.txt", "r",encoding="utf-8") as f:
-    #     content = f.read()
-
-    # true = 'true'
-    # contents = json.loads(content[6:])
-    # contents = contents['default']['timelineData']
-    # # print(len(contents)) # 52
-    # trends = list()
-    # de = list()
-    # ds = list()
-    # da = list()
-    # se = list()
-    # t = list()
-    # for week in range(len(contents)):
-    #     value_list = contents[week]['formattedValue']
-    #     value_list = list(map(int, value_list))
-    #     # print(value_list)
-    #     time = contents[week]['formattedAxisTime']
-    #     time = json.dumps(time)
-    #     # trends.append(json.dumps({"value":value_list,"time":time}))
-    #     # trends.append(json.dumps({"dataengineer":value_list[0],"datascientist":value_list[1],"dataanalyst":value_list[2],"softwareengineer":value_list[3],"time":time}))
-        
-    #     de.append(value_list[0])
-    #     ds.append(value_list[1])
-    #     da.append(value_list[2])
-    #     se.append(value_list[3])
-    #     time = contents[week]['formattedAxisTime']
-    #     t.append(json.dumps(time))
-    # trends.append(json.dumps({'de':de,'ds':ds,'da':da,'se':se,'time':t}))
-    # return trends
 
 
 
